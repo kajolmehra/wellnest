@@ -34,19 +34,46 @@ Wellnest brings daily wellness actions into one mobile experience. Users complet
 | State and data | Redux Toolkit, AsyncStorage, API requests, upload payloads, and local session state |
 | Device integration | Google sign-in, date/time pickers, camera/gallery selection, health/fitness bridges, and permissions |
 
-## Representative flow
+## Wellness operating flow
+
+Wellnest turns onboarding data into a repeatable daily loop: define a goal, complete small wellness actions, review progress, and reach the right practitioner or food provider when support is needed.
 
 ```mermaid
-flowchart LR
-    NewUser[Register + verify] --> Profile[Set goals and profile]
-    Profile --> Home[Wellness home]
-    Home --> Diary[Log meals and hydration]
-    Home --> Workout[Follow workout / progress]
-    Home --> Consult[Find dietitian]
-    Consult --> Appointment[Book consultation]
-    Home --> Food[Browse food providers]
-    Food --> Cart[Build cart and place order]
+flowchart TB
+    Welcome[Welcome] --> Auth[Register / sign in]
+    Auth --> Verify[Verify account]
+    Verify --> Profile[Set profile, goals, and target weight]
+    Profile --> Dashboard[Open daily dashboard]
+
+    subgraph HABITS[01 - Build daily habits]
+        Meals[Log meals and macros]
+        Water[Track hydration]
+        Workout[Follow workout]
+        Meals --> Progress[Review progress]
+        Water --> Progress
+        Workout --> Progress
+    end
+
+    subgraph CARE[02 - Reach care]
+        Search[Find dietitian] --> Slot[Choose consultation slot]
+        Slot --> Appointment[Confirm appointment]
+    end
+
+    subgraph ORDER[03 - Complete an order]
+        Provider[Browse food provider] --> Cart[Build cart]
+        Cart --> Order[Place food order]
+        Order --> Receipt[Order confirmation]
+    end
+
+    Dashboard --> Meals
+    Dashboard --> Water
+    Dashboard --> Workout
+    Dashboard --> Search
+    Dashboard --> Provider
+    Progress -. return to dashboard .-> Dashboard
 ```
+
+**Outcome:** a measurable wellness routine with connected practitioner and food-service workflows.
 
 ## Technical stack
 
